@@ -1,0 +1,22 @@
+{
+  "name": "sitemap-generate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^12.1.1",
+    "@types/node": "^22.8.1",
+    "rollup": "^4.24.2",
+    "tslib": "^2.8.0"
+  },
+  "dependencies": {
+    "@actions/core": "^1.11.1"
+  }
+}
