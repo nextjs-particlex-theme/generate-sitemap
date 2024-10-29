@@ -8,7 +8,7 @@ import { defineConfig } from 'rollup'
 export default defineConfig({
   input: 'src/index.ts',
   output: {
-    file: 'dest/bundle.js',
+    file: 'dist/bundle.js',
     format: 'es',
     compact: true,
   },

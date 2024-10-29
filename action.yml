@@ -24,4 +24,4 @@ outputs:
     description: 'The time we greeted you'
 runs:
   using: 'node20'
-  main: 'dest/bundle.js'
+  main: 'dist/bundle.js'
