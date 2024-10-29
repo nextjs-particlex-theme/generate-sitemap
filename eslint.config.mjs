@@ -7,7 +7,6 @@ export default tseslint.config({
     eslint.configs.recommended,
     ...tseslint.configs.recommended,
   ],
-  files: ['**/*.ts', '**/*.mjs'],
   ignores: ['dist/', '.rollup.cache/'],
   rules: {
     'quotes': ['error', 'single'],
