@@ -1,5 +1,6 @@
-import {TEST_VISIT_PATH} from "../src/inputs";
-import generateSitemapXML, {SitemapRecord} from "../src/sitemap";
+import { TEST_VISIT_PATH } from '../src/inputs'
+import type { SitemapRecord } from '../src/sitemap'
+import generateSitemapXML from '../src/sitemap'
 
 
 test('Test generateSitemapXML with old data', async () => {
@@ -23,7 +24,7 @@ test('Test generateSitemapXML with old data', async () => {
   const lastmod = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
 
   const record: SitemapRecord = {}
-  const xmlContent = await generateSitemapXML([{basePath: TEST_VISIT_PATH, pathname: '/', filepath: './test/__templates__/out/hello.html'}], record)
+  const xmlContent = await generateSitemapXML([{ basePath: TEST_VISIT_PATH, pathname: '/', filepath: './test/__templates__/out/hello.html' }], record)
   expect(xmlContent).not.toEqual(map)
 
   expect(record[TEST_VISIT_PATH + '/'].lastmod).toEqual(lastmod)

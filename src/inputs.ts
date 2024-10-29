@@ -1,5 +1,5 @@
-import core from "@actions/core";
-import path from "node:path";
+import core from '@actions/core'
+import path from 'node:path'
 
 export const TEST_VISIT_PATH = 'https://foo.bar'
 

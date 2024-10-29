@@ -3,12 +3,12 @@
  * https://jestjs.io/docs/configuration
  */
 
-import type {Config} from 'jest';
+import type { Config } from 'jest'
 
 const config: Config = {
   extensionsToTreatAsEsm: ['.ts'],
   transform: {
-    '\\.[jt]sx?$': ["ts-jest", {
+    '\\.[jt]sx?$': ['ts-jest', {
       useESM: true,
     }],
   },
@@ -39,7 +39,7 @@ const config: Config = {
   // ],
 
   // Indicates which provider should be used to instrument code for coverage
-  coverageProvider: "v8",
+  coverageProvider: 'v8',
 
   // A list of reporter names that Jest uses when writing coverage reports
   // coverageReporters: [
@@ -200,6 +200,6 @@ const config: Config = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-};
+}
 
-export default config;
+export default config

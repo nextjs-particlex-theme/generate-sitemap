@@ -1,6 +1,6 @@
-import xml2js from 'xml2js';
-import fs from "node:fs";
-import {md5} from "./util";
+import xml2js from 'xml2js'
+import fs from 'node:fs'
+import { md5 } from './util'
 
 type IndexedSiteMap = {
   xml: XMLSiteMap,
@@ -23,10 +23,10 @@ type XMLSitemapUrl = {
 
 export async function parseSitemapXML(xml: string): Promise<IndexedSiteMap> {
   return new Promise((resolve, reject) => {
-    xml2js.parseString(xml, {async: true}, (err, xml) => {
+    xml2js.parseString(xml, { async: true }, (err, xml) => {
       if (err) {
-        reject(err);
-        return;
+        reject(err)
+        return
       }
       const parsed = xml as XMLSiteMap
       const index: Record<string, number> = {}
@@ -38,8 +38,8 @@ export async function parseSitemapXML(xml: string): Promise<IndexedSiteMap> {
       resolve({
         xml: parsed,
         pathToIndex: index
-      });
-    });
+      })
+    })
   })
 }
 
@@ -86,7 +86,7 @@ export default async function generateSitemapXML(items: SitemapGenerateItem[], s
   const lastmod = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
 
   const urls: XMLSitemapUrl[] = []
-  let root: XMLSiteMap = {
+  const root: XMLSiteMap = {
     '$': {
       xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9',
       'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
@@ -97,7 +97,7 @@ export default async function generateSitemapXML(items: SitemapGenerateItem[], s
     }
   }
 
-  for (let item of items) {
+  for (const item of items) {
     const url = new URL(item.pathname, item.basePath)
     const record = sitemapRecord[url.href]
     const newSha = await md5(fs.readFileSync(item.filepath, 'utf8'))
@@ -116,7 +116,7 @@ export default async function generateSitemapXML(items: SitemapGenerateItem[], s
     }
   }
 
-  for (let key of Object.keys(sitemapRecord)) {
+  for (const key of Object.keys(sitemapRecord)) {
     const item = sitemapRecord[key]
     urls.push({
       loc: [key],

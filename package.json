@@ -4,26 +4,32 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_OPTIONS='--experimental-vm-modules' jest"
+    "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
+    "lint": "eslint . --fix"
   },
   "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@eslint/js": "^9.13.0",
     "@rollup/plugin-commonjs": "^28.0.1",
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^12.1.1",
+    "@types/eslint__js": "^8.42.3",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.8.1",
     "@types/xml2js": "^0.4.14",
     "add": "^2.0.6",
+    "eslint": "^9.13.0",
     "jest": "^29.7.0",
     "rollup": "^4.24.2",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
-    "tslib": "^2.8.0"
+    "tslib": "^2.8.0",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.12.1"
   },
   "dependencies": {
     "@actions/core": "^1.11.1",

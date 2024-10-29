@@ -1,9 +1,10 @@
 import core from '@actions/core'
-import {commitAndPush, glob, readFileContent} from "./util";
-import inputs from "./inputs";
-import generateSitemapXML, {SitemapRecord} from "./sitemap";
-import path from "node:path";
-import fs from "node:fs";
+import { commitAndPush, glob, readFileContent } from './util'
+import inputs from './inputs'
+import type { SitemapRecord } from './sitemap'
+import generateSitemapXML from './sitemap'
+import path from 'node:path'
+import fs from 'node:fs'
 
 async function main() {
   const cacheFileContent = readFileContent(inputs.cacheFilePath)
@@ -31,7 +32,7 @@ async function main() {
   if (process.env.NODE_ENV !== 'test') {
     core.info('Writing sitemap.xml...')
   }
-  fs.writeFileSync(path.join(inputs.outputPath, 'sitemap.xml'), xml, {encoding: 'utf8'})
+  fs.writeFileSync(path.join(inputs.outputPath, 'sitemap.xml'), xml, { encoding: 'utf8' })
   if (process.env.NODE_ENV !== 'test') {
     core.info('Writing cache file...')
   }
