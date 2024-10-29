@@ -10,8 +10,12 @@ async function main() {
   const cacheFileContent = readFileContent(inputs.cacheFilePath)
   let cache: SitemapRecord
 
+  if (process.env.NODE_ENV === 'production') {
+    core.debug('Config is: ' + JSON.stringify(inputs))
+  }
+
   if (cacheFileContent === undefined) {
-    if (process.env.NODE_ENV !== 'test') {
+    if (process.env.NODE_ENV === 'production') {
       core.info('No sitemap in vcs!')
     }
     cache = {}
@@ -29,11 +33,11 @@ async function main() {
     }
   }), cache)
 
-  if (process.env.NODE_ENV !== 'test') {
+  if (process.env.NODE_ENV === 'production') {
     core.info('Writing sitemap.xml...')
   }
   fs.writeFileSync(path.join(inputs.outputPath, 'sitemap.xml'), xml, { encoding: 'utf8' })
-  if (process.env.NODE_ENV !== 'test') {
+  if (process.env.NODE_ENV === 'production') {
     core.info('Writing cache file...')
   }
   fs.writeFileSync(inputs.cacheFilePath, JSON.stringify(cache), 'utf8')
