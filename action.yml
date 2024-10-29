@@ -1,10 +1,24 @@
 name: 'Hello World'
 description: 'Greet someone and record the time'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  source-path:  # id of input
+    description: 'The directory path of your repo.'
     required: true
-    default: 'World'
+    default: 'nextjs-particlex-theme'
+  output-path:
+    description: 'The HTML output path, relative from `source-path`'
+    required: true
+    default: 'out'
+  sitemap-cache-file:
+    description: 'The path to store the sitemap cache file'
+    required: true
+    default: 'sitemap-cache.json'
+  base-path:
+    description: 'Your site visit path'
+    required: true
+  commit-message:
+    description: 'The commit message when update cache file.'
+    default: 'Update sitemap-cache.json'
 outputs:
   time: # id of output
     description: 'The time we greeted you'
