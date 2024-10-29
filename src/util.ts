@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto'
 import { execSync, spawnSync } from 'node:child_process'
 import core from '@actions/core'
 import inputs from './inputs'
+import * as os from "node:os";
 
 /**
  * 搜索文件
@@ -68,13 +69,18 @@ export const commitAndPush = (filepath: string, cwd: string) => {
     spawnSync('git', ['config', '--global', 'user.email', '"github-actions[bot]@users.noreply.github.com"'], { stdio: 'inherit', cwd })
   }
   spawnSync('git', ['add', filepath], { stdio: 'inherit', cwd })
-  const status = execSync('git status --short | wc -l', { cwd }).toString('utf8')
+  let status: string
+  if (os.type() === 'Windows_NT') {
+    status = execSync('git status --short | find /V /C ""', { cwd }).toString('utf8').trim()
+  } else {
+    status = execSync('git status --short | wc -l', { cwd }).toString('utf8').trim()
+  }
   if (status === undefined || status === '0') {
     core.debug('Status is ' + status)
     throw Error('Nothing to commit!')
   }
   spawnSync('git', ['commit', '-m', inputs.commitMessage], { stdio: 'inherit', cwd })
-  const branch = execSync('git branch --show-current', { cwd }).toString('utf8')
+  const branch = execSync('git branch --show-current', { cwd }).toString('utf8').trim()
 
   if (process.env.NODE_ENV === 'production') {
     const push = spawnSync('git', ['push', 'origin', branch], { stdio: 'inherit', cwd })
