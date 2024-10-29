@@ -38,7 +38,7 @@ async function main() {
   }
   fs.writeFileSync(inputs.cacheFilePath, JSON.stringify(cache), 'utf8')
 
-  commitAndPush(path.basename(inputs.cacheFilePath), inputs.basePath)
+  commitAndPush(path.basename(inputs.cacheFilePath), inputs.root)
 }
 
 main()
