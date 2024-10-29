@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
-    "lint": "eslint . --fix"
+    "lint": "eslint . --fix",
+    "build": "rollup -c"
   },
   "type": "module",
   "keywords": [],
