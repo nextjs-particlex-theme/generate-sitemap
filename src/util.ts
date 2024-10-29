@@ -57,6 +57,13 @@ export const md5 = (content: string): Promise<string> => {
   })
 }
 
+function spawnSyncAndEnsureSuccess(...args: Parameters<typeof spawnSync>) {
+  const r = spawnSync(...args)
+  if (r.status !== 0) {
+    throw new Error('Execute command failed, args: ' + JSON.stringify(args))
+  }
+}
+
 /**
  * 提交文件并推送
  * @param filepath 文件相对路径
@@ -65,10 +72,10 @@ export const md5 = (content: string): Promise<string> => {
 export const commitAndPush = (filepath: string, cwd: string) => {
   if (process.env.NODE_ENV === 'production') {
     core.info('Trying commit and push ' + filepath)
-    spawnSync('git', ['config', '--global', 'user.name', '"github-actions[bot]"'], { stdio: 'inherit', cwd })
-    spawnSync('git', ['config', '--global', 'user.email', '"github-actions[bot]@users.noreply.github.com"'], { stdio: 'inherit', cwd })
+    spawnSyncAndEnsureSuccess('git', ['config', '--global', 'user.name', '"github-actions[bot]"'], { stdio: 'inherit', cwd })
+    spawnSyncAndEnsureSuccess('git', ['config', '--global', 'user.email', '"github-actions[bot]@users.noreply.github.com"'], { stdio: 'inherit', cwd })
   }
-  spawnSync('git', ['add', filepath], { stdio: 'inherit', cwd })
+  spawnSyncAndEnsureSuccess('git', ['add', filepath], { stdio: 'inherit', cwd })
 
   const status: string = execSync('git status --short', { cwd }).toString('utf8').trim()
 
@@ -77,13 +84,10 @@ export const commitAndPush = (filepath: string, cwd: string) => {
     throw Error('Nothing to commit!')
   }
 
-  spawnSync('git', ['commit', '-m', inputs.commitMessage], { stdio: 'inherit', cwd })
+  spawnSyncAndEnsureSuccess('git', ['commit', '-m', inputs.commitMessage], { stdio: 'inherit', cwd })
   const branch = execSync('git branch --show-current', { cwd }).toString('utf8').trim()
 
   if (process.env.NODE_ENV === 'production') {
-    const push = spawnSync('git', ['push', 'origin', branch], { stdio: 'inherit', cwd })
-    if (push.status !== 0) {
-      throw Error('Failed to push!')
-    }
+    spawnSyncAndEnsureSuccess('git', ['push', 'origin', branch], { stdio: 'inherit', cwd })
   }
 }
