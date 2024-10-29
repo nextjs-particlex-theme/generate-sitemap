@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto'
 import { execSync, spawnSync } from 'node:child_process'
 import core from '@actions/core'
 import inputs from './inputs'
-import * as os from "node:os";
+import { info } from './logger'
 
 /**
  * 搜索文件
@@ -70,11 +70,9 @@ function spawnSyncAndEnsureSuccess(...args: Parameters<typeof spawnSync>) {
  * @param cwd git 仓库路径
  */
 export const commitAndPush = (filepath: string, cwd: string) => {
-  if (process.env.NODE_ENV === 'production') {
-    core.info('Trying commit and push ' + filepath)
-    spawnSyncAndEnsureSuccess('git', ['config', '--global', 'user.name', '"github-actions[bot]"'], { stdio: 'inherit', cwd })
-    spawnSyncAndEnsureSuccess('git', ['config', '--global', 'user.email', '"github-actions[bot]@users.noreply.github.com"'], { stdio: 'inherit', cwd })
-  }
+  info('Trying commit and push ' + filepath)
+  spawnSyncAndEnsureSuccess('git', ['config', '--global', 'user.name', '"github-actions[bot]"'], { stdio: 'inherit', cwd })
+  spawnSyncAndEnsureSuccess('git', ['config', '--global', 'user.email', '"github-actions[bot]@users.noreply.github.com"'], { stdio: 'inherit', cwd })
   spawnSyncAndEnsureSuccess('git', ['add', filepath], { stdio: 'inherit', cwd })
 
   const status: string = execSync('git status --short', { cwd }).toString('utf8').trim()

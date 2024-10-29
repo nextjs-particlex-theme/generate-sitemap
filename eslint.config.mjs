@@ -8,7 +8,7 @@ export default tseslint.config({
     ...tseslint.configs.recommended,
   ],
   files: ['**/*.ts', '**/*.mjs'],
-  ignores: ['dist/', '.rollup.cache/*'],
+  ignores: ['dist/', '.rollup.cache/'],
   rules: {
     'quotes': ['error', 'single'],
     'key-spacing': ['error', { 'beforeColon': false }],
@@ -29,5 +29,4 @@ export default tseslint.config({
       'ignoreRestSiblings': true
     }]
   }
-}
-)
+})
