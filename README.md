@@ -1,4 +1,4 @@
-# sitemap-generate
+# Generate-Sitemap
 
 一个通用的 Github Action，用于生成 sitemap。
 

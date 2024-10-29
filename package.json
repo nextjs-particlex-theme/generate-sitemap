@@ -1,5 +1,5 @@
 {
-  "name": "sitemap-generate",
+  "name": "generate-sitemap",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

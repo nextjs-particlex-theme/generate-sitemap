@@ -1,27 +1,24 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'Generate Sitemap'
+description: 'Automatically generate sitemap for you website.'
 inputs:
-  source-path:  # id of input
-    description: 'The directory path of your repo.'
+  source-path:
+    description: 'The directory of your repo. We will commit a sitemap file to this repo. Must be checkout before this action run!'
     required: true
     default: 'nextjs-particlex-theme'
   output-path:
-    description: 'The HTML output path, relative from `source-path`'
+    description: 'The HTML output path.'
     required: true
     default: 'out'
   sitemap-cache-file:
-    description: 'The path to store the sitemap cache file'
+    description: 'A relative path from `source-path` to store the sitemap cache file'
     required: true
     default: 'sitemap-cache.json'
-  base-path:
-    description: 'Your site visit path'
+  web-base-path:
+    description: 'Your site base path'
     required: true
   commit-message:
     description: 'The commit message when update cache file.'
     default: 'Update sitemap-cache.json'
-outputs:
-  time: # id of output
-    description: 'The time we greeted you'
 runs:
   using: 'node20'
   main: 'dist/bundle.js'

@@ -39,23 +39,17 @@ function getTestInputs(): Inputs {
 }
 
 function getProductionInputs(): Inputs {
-  const originalInput = {
-    sourcePath: core.getInput('source-path'),
-    outputPath: core.getInput('output-path'),
-    sitemapPath: core.getInput('sitemap-cache-file'),
-    visitPath: core.getInput('base-path'),
-  }
+  const sourcePath = core.getInput('source-path')
+  const outputPath = core.getInput('output-path')
+  const sitemapPath = core.getInput('sitemap-cache-file')
+  const visitPath = core.getInput('web-base-path')
 
-
-  const root = path.isAbsolute(originalInput.sourcePath) ?
-    originalInput.sourcePath : path.resolve(process.env.GITHUB_WORKSPACE, originalInput.sourcePath)
-  core.debug(`Source directory is ${root}`)
-
+  const vcsRoot = path.resolve(process.env.GITHUB_WORKSPACE, sourcePath)
   return {
-    root,
-    outputPath: path.resolve(root, originalInput.outputPath),
-    cacheFilePath: path.resolve(root, originalInput.sitemapPath),
-    basePath: originalInput.visitPath,
+    root: vcsRoot,
+    outputPath: path.resolve(process.env.GITHUB_WORKSPACE, outputPath),
+    cacheFilePath: path.resolve(vcsRoot, sitemapPath),
+    basePath: visitPath,
     commitMessage: core.getInput('commit-message')
   }
 }
