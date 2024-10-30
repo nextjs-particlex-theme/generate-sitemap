@@ -34,12 +34,12 @@ type Inputs = {
 function getTestInputs(): Inputs {
   const testRoot = path.resolve('test')
   return {
-    root: path.resolve(testRoot, '__source__'),
+    root: "D:\\Blog\\iceofsummer.github.io",
     cacheFilePath: path.join(testRoot, '__templates__/sitemap-cache.json'),
-    pagesPath: path.join(testRoot, '__source__'),
+    pagesPath: "D:\\Blog\\iceofsummer.github.io\\source",
     basePath: TEST_VISIT_PATH,
     commitMessage: 'Msg',
-    outputPath: path.resolve(testRoot, '__templates__')
+    outputPath: "D:\\Project\\self\\hexo-theme-particlex-nextjs\\out"
   }
 }
 

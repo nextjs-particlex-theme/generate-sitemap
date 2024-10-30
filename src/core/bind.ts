@@ -1,7 +1,7 @@
 import inputs from '../inputs'
 import fs from 'node:fs'
 import path from 'node:path'
-import { warn } from '../logger'
+import {debug, isDebug, warn} from '../logger'
 
 export type BoundPage = {
   filepath: string
@@ -22,8 +22,11 @@ function getBaseNameWithoutSuffix(filePath: string): string {
 function findUntilEmpty(filePath: string): string | undefined{
   // remove .md suffix
   const target = filePath.substring(0, filePath.length - 3)
-  if (fs.existsSync(path.join(inputs.outputPath, target + '.html'))) {
+  const searchTarget = path.join(inputs.outputPath, target + '.html')
+  if (fs.existsSync(searchTarget)) {
     return getBaseNameWithoutSuffix(filePath)
+  } else {
+    debug(`File \`${searchTarget}\` is not exist.`)
   }
   const pos = filePath.indexOf(path.sep)
   if (pos < 0) {
@@ -41,12 +44,17 @@ function findUntilEmpty(filePath: string): string | undefined{
  */
 export default function tryBindPage(root: string, paths: string[]): BoundPage[] {
   const result: BoundPage[] = []
+  if (isDebug()) {
+    const searched = fs.globSync('**/*.html', { cwd: inputs.outputPath, withFileTypes: true })
+    debug('Output files: \n' + JSON.stringify(searched))
+  }
   for (const filePath of paths) {
+    debug(`Trying to search the web path of '${filePath}'`)
     const webPath = findUntilEmpty(filePath)
     if (webPath) {
       result.push({ webPathname: webPath, filepath: path.resolve(root, filePath) })
     } else {
-      warn('No correspondent page find for ' + path.resolve(root, filePath))
+      warn('No correspondent page find for ' + filePath)
     }
   }
   return result

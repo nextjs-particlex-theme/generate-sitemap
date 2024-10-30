@@ -24,3 +24,11 @@ export function warn(msg: string) {
     console.warn(msg)
   }
 }
+
+export function isDebug() {
+  if (process.env.NODE_ENV === 'production') {
+    return core.isDebug()
+  } else {
+    return true
+  }
+}
