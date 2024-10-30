@@ -45,14 +45,13 @@ function getTestInputs(): Inputs {
 
 function getProductionInputs(): Inputs {
   const sourcePath = core.getInput('source-path')
-  const pagesPath = core.getInput('pages-path')
   const sitemapPath = core.getInput('sitemap-cache-file')
   const visitPath = core.getInput('web-base-path')
 
   const vcsRoot = path.resolve(process.env.GITHUB_WORKSPACE, sourcePath)
   return {
     root: vcsRoot,
-    pagesPath: path.resolve(process.env.GITHUB_WORKSPACE, pagesPath),
+    pagesPath: path.resolve(vcsRoot, core.getInput('pages-path')),
     cacheFilePath: path.resolve(vcsRoot, sitemapPath),
     basePath: visitPath,
     commitMessage: core.getInput('commit-message'),
