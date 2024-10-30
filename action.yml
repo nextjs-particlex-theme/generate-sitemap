@@ -4,11 +4,15 @@ inputs:
   source-path:
     description: 'The directory of your repo. We will commit a sitemap file to this repo. Must be checkout before this action run!'
     required: true
-    default: 'nextjs-particlex-theme'
+    default: 'datasource'
   output-path:
     description: 'The HTML output path.'
     required: true
-    default: 'out'
+    default: 'nextjs-particlex-theme/out'
+  pages-path:
+    description: 'The path that you save all the markdown files, relative from `source-path`.'
+    required: true
+    default: 'source'
   sitemap-cache-file:
     description: 'A relative path from `source-path` to store the sitemap cache file'
     required: true

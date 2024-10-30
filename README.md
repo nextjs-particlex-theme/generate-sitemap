@@ -39,9 +39,11 @@ job:
           # IMPORTANT! 如果你想要提交 issue，请开启该功能以提供完全的调用栈!
           NODE_OPTIONS: "--enable-source-maps"
         with:
-          source-path: 'datasource' 
-          output-path: 'nextjs-particlex-theme'
-          web-base-path: 'https://foo.bar/'
+        source-path: 'datasource'
+        output-path: 'nextjs-particlex-theme/out'
+        pages-path: 'source'
+        web-base-path: 'https://iceofsummer.github.io/'
+
 ```
 
 ### Parameters
@@ -51,12 +53,14 @@ job:
 >
 > `<null>` 代表必填。
 
-| 属性                 | 默认值                       | 说明                           |
-|----------------------|-----------------------------|---------------------------------|
-| `source-path`        | `<null>`                    | 你自己的仓库，用于提交sitemap文件的缓存      |
-| `output-path`        | `<null>`                    | HTML构建的输出，会扫描该目录然后生成 sitemap |
-| `sitemap-cache-file` | `sitemap-cache.json`        | sitemap缓存文件存放位置              |
-| `web-base-path`      | `<null>`                    | 网站 basePath                  |
-| `commit-message`     | `Update sitemap-cache.json` | 提交时的提交信息                     |
+| 属性                   | 默认值                          | 说明                                      |
+|----------------------|------------------------------|-----------------------------------------|
+| `source-path`        | `datasource`                 | 你自己的仓库，用于提交sitemap文件的缓存                 |
+| `output-path`        | `nextjs-particlex-theme/out` | HTML构建的输出目录                             |
+| `pages-path`         | `source`                     | 存放所有markdown文件的目录, 是相对于`source-path`的路径 |
+| `sitemap-cache-file` | `sitemap-cache.json`         | sitemap缓存文件存放位置                         |
+| `web-base-path`      | `<null>`                     | 网站 basePath                             |
+| `commit-message`     | `Update sitemap-cache.json`  | 提交时的提交信息                                |
 
 
+如果你的博客从 hexo 迁移过来，那么你不需要任何配置(前提是你没有修改 `actions/checkout@v4` 的 `path` 参数)。

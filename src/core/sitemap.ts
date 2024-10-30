@@ -1,11 +1,8 @@
 import xml2js from 'xml2js'
 import fs from 'node:fs'
-import { md5 } from './util'
+import { md5 } from '../util'
+import type { BoundPage } from './bind'
 
-type IndexedSiteMap = {
-  xml: XMLSiteMap,
-  pathToIndex: Record<string, number>
-}
 
 type XMLSiteMap = {
   '$': Record<string, string>
@@ -19,43 +16,6 @@ type XMLSitemapUrl = {
   priority: [string],
   lastmod: [string],
   changefreq: [string],
-}
-
-export async function parseSitemapXML(xml: string): Promise<IndexedSiteMap> {
-  return new Promise((resolve, reject) => {
-    xml2js.parseString(xml, { async: true }, (err, xml) => {
-      if (err) {
-        reject(err)
-        return
-      }
-      const parsed = xml as XMLSiteMap
-      const index: Record<string, number> = {}
-      const urls = parsed.urlset.url
-      for (let i = 0; i < urls.length; i++) {
-        const url = new URL(urls[i].loc[0])
-        index[url.pathname] = i
-      }
-      resolve({
-        xml: parsed,
-        pathToIndex: index
-      })
-    })
-  })
-}
-
-type SitemapGenerateItem = {
-  /**
-   * 访问的根路径。
-   */
-  basePath: string
-  /**
-   * 对应的文件路径
-   */
-  filepath: string
-  /**
-   * url 的 pathname
-   */
-  pathname: string
 }
 
 type SitemapRecordItem = {
@@ -73,14 +33,13 @@ type SitemapRecordItem = {
  */
 export type SitemapRecord = Record<string, SitemapRecordItem>
 
-
-
 /**
  * 生成 sitemap
+ * @param basepath 网站访问域名
  * @param items 要生成的 sitemap url
  * @param sitemapRecord 旧的 sitemap 内容. 将会修改该对象的内容，如果没有可用的对象，应该传入一个空对象来获取修改后的设置，以便于持久化
  */
-export default async function generateSitemapXML(items: SitemapGenerateItem[], sitemapRecord: SitemapRecord): Promise<string> {
+export default async function generateSitemapXML(basepath: string, items: BoundPage[], sitemapRecord: SitemapRecord): Promise<string> {
 
   const date = new Date()
   const lastmod = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
@@ -98,7 +57,7 @@ export default async function generateSitemapXML(items: SitemapGenerateItem[], s
   }
 
   for (const item of items) {
-    const url = new URL(item.pathname, item.basePath)
+    const url = new URL(item.webPathname, basepath)
     const record = sitemapRecord[url.href]
     const newSha = await md5(fs.readFileSync(item.filepath, 'utf8'))
     if (!record) {

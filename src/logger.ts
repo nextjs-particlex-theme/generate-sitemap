@@ -15,3 +15,12 @@ export function debug(msg: string) {
     console.debug(msg)
   }
 }
+
+
+export function warn(msg: string) {
+  if (process.env.NODE_ENV === 'production') {
+    core.warning(msg)
+  } else {
+    console.warn(msg)
+  }
+}

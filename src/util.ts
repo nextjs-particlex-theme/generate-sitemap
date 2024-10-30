@@ -8,15 +8,18 @@ import { info } from './logger'
 /**
  * 搜索文件
  * @param root 根路径
- * @param ext 后缀名
+ * @param exts 后缀名
  * @return {string[]} 搜索到的文件，返回相对路径
  */
-export function glob(root: string, ext: string): string[] {
+export function glob(root: string, ...exts: string[]): string[] {
   const files = fs.readdirSync(root, { recursive: true, encoding: 'utf8' })
   const result: string[] = []
   for (const file of files) {
-    if (file.endsWith(ext)) {
-      result.push(file)
+    for (const ext of exts) {
+      if (file.endsWith(ext)) {
+        result.push(file)
+        break
+      }
     }
   }
   return result

@@ -13,6 +13,10 @@ type Inputs = {
    */
   outputPath: string
   /**
+   * 存放所有页面的路径
+   */
+  pagesPath: string
+  /**
    * sitemap 路径
    */
   cacheFilePath: string
@@ -28,29 +32,31 @@ type Inputs = {
 
 
 function getTestInputs(): Inputs {
-  const root = path.resolve('test/__templates__')
+  const testRoot = path.resolve('test')
   return {
-    root,
-    cacheFilePath: path.join(root, 'sitemap-cache.json'),
-    outputPath: path.join(root, 'out'),
+    root: path.resolve(testRoot, '__source__'),
+    cacheFilePath: path.join(testRoot, '__templates__/sitemap-cache.json'),
+    pagesPath: path.join(testRoot, '__source__'),
     basePath: TEST_VISIT_PATH,
-    commitMessage: 'Msg'
+    commitMessage: 'Msg',
+    outputPath: path.resolve(testRoot, '__templates__')
   }
 }
 
 function getProductionInputs(): Inputs {
   const sourcePath = core.getInput('source-path')
-  const outputPath = core.getInput('output-path')
+  const pagesPath = core.getInput('pages-path')
   const sitemapPath = core.getInput('sitemap-cache-file')
   const visitPath = core.getInput('web-base-path')
 
   const vcsRoot = path.resolve(process.env.GITHUB_WORKSPACE, sourcePath)
   return {
     root: vcsRoot,
-    outputPath: path.resolve(process.env.GITHUB_WORKSPACE, outputPath),
+    pagesPath: path.resolve(process.env.GITHUB_WORKSPACE, pagesPath),
     cacheFilePath: path.resolve(vcsRoot, sitemapPath),
     basePath: visitPath,
-    commitMessage: core.getInput('commit-message')
+    commitMessage: core.getInput('commit-message'),
+    outputPath: path.resolve(vcsRoot, core.getInput('output-path')),
   }
 }
 
