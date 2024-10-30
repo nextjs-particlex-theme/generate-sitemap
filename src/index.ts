@@ -20,12 +20,12 @@ async function main() {
     cache = JSON.parse(cacheFileContent)
   }
 
-  info('Search files in ' + inputs.outputPath)
-
-
+  info('Search files in ' + inputs.pagesPath)
   const files = glob(inputs.pagesPath, '.md', '.mdx')
 
   const bound = tryBindPage(inputs.pagesPath, files)
+
+  debug('Bound pages: \n' + JSON.stringify(bound))
 
   const xml = await generateSitemapXML(inputs.basePath, bound, cache)
 

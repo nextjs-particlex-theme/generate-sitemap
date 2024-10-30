@@ -2,6 +2,7 @@ import xml2js from 'xml2js'
 import fs from 'node:fs'
 import { md5 } from '../util'
 import type { BoundPage } from './bind'
+import { debug } from '../logger'
 
 
 type XMLSiteMap = {
@@ -60,6 +61,7 @@ export default async function generateSitemapXML(basepath: string, items: BoundP
     const url = new URL(item.webPathname, basepath)
     const record = sitemapRecord[url.href]
     const newSha = await md5(fs.readFileSync(item.filepath, 'utf8'))
+    debug(`The hash of file ${item.filepath} is '${newSha}'`)
     if (!record) {
       sitemapRecord[url.href] = {
         sha: newSha,
