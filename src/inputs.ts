@@ -30,41 +30,46 @@ type Inputs = {
   commitMessage: string
 }
 
-
-function getTestInputs(): Inputs {
-  const testRoot = path.resolve('test')
-  return {
-    root: "D:\\Blog\\iceofsummer.github.io",
-    cacheFilePath: path.join(testRoot, '__templates__/sitemap-cache.json'),
-    pagesPath: "D:\\Blog\\iceofsummer.github.io\\source",
-    basePath: TEST_VISIT_PATH,
-    commitMessage: 'Msg',
-    outputPath: "D:\\Project\\self\\hexo-theme-particlex-nextjs\\out"
-  }
+export type OriginalInputs = {
+  sourcePath: string
+  outputPath: string
+  pagesPath: string
+  sitemapCacheFile: string
+  webBasePath: string
+  commitMessage: string
 }
 
-function getProductionInputs(): Inputs {
-  const sourcePath = core.getInput('source-path')
-  const sitemapPath = core.getInput('sitemap-cache-file')
-  const visitPath = core.getInput('web-base-path')
-
-  const vcsRoot = path.resolve(process.env.GITHUB_WORKSPACE, sourcePath)
-  return {
-    root: vcsRoot,
-    pagesPath: path.resolve(vcsRoot, core.getInput('pages-path')),
-    cacheFilePath: path.resolve(vcsRoot, sitemapPath),
-    basePath: visitPath,
-    commitMessage: core.getInput('commit-message'),
-    outputPath: path.resolve(vcsRoot, core.getInput('output-path')),
+function getOriginalInputs():OriginalInputs {
+  if (process.env.NODE_ENV === 'production') {
+    return {
+      sourcePath: core.getInput('source-path'),
+      outputPath: core.getInput('output-path'),
+      pagesPath: core.getInput('pages-path'),
+      sitemapCacheFile: core.getInput('sitemap-cache-file'),
+      webBasePath: core.getInput('web-base-path'),
+      commitMessage: core.getInput('commit-message'),
+    }
   }
+  if (global.originalInput) {
+    return global.originalInput
+  }
+  throw new Error('No inputs found!')
 }
-
 
 function parseInputs(): Inputs {
-  if (process.env.NODE_ENV === 'test') {
-    return getTestInputs()
+  const originalInputs = getOriginalInputs()
+  const basePath = process.env.NODE_ENV === 'production' ? process.env.GITHUB_WORKSPACE : ''
+
+  const vcsRoot = path.resolve(basePath, originalInputs.sourcePath)
+
+  return {
+    root: vcsRoot,
+    pagesPath: path.resolve(vcsRoot, originalInputs.pagesPath),
+    cacheFilePath: path.resolve(vcsRoot, originalInputs.sitemapCacheFile),
+    basePath: originalInputs.webBasePath,
+    commitMessage: originalInputs.commitMessage,
+    outputPath: path.resolve(basePath, originalInputs.outputPath),
   }
-  return getProductionInputs()
 }
 
 const inputs = parseInputs()
