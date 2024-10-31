@@ -34,11 +34,12 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: repo/pnpm-lock.yaml
       - name: Lint Project
-        run: pnpm run lint
+        run: cd repo && pnpm run lint
       - name: Build Project
-        run: pnpm run build
+        run: cd repo && pnpm run build
       - name: Push Project
         run: >
+          cd repo &&
           git config --global user.name "github-actions[bot]" &&
           git config --global user.email "github-actions[bot]@users.noreply.github.com" &&
           git add . &&
