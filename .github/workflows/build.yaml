@@ -62,9 +62,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com" &&
           git add . &&
           git commit -m "chore: lint and build project" &&
-          git commit -m "chore: lint project" &&
           git push origin $BRANCH
-          echo "passed=1" >> "$GITHUB_OUTPUT"
       - name: Remove Failed Label
         uses: actions-cool/issues-helper@v3
         with:
