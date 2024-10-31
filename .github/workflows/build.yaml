@@ -22,7 +22,7 @@ jobs:
       - name: Checkout Main Repository
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: master
           path: repo
       - name: Use Node.js 20
         uses: actions/setup-node@v4
@@ -49,15 +49,14 @@ jobs:
           actions: 'remove-labels'
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
-          labels: 'build-failed'
+          labels: 'build:failed'
       - name: Create Build Success Label
         uses: actions-cool/issues-helper@v3
         with:
-          actions: 'create-label'
+          actions: 'add-labels'
           token: ${{ secrets.GITHUB_TOKEN }}
-          label-name: 'build-success'
-          label-color: '00FF00'
-          label-desc: 'Build Success.'
+          issue-number: ${{ github.event.issue.number }}
+          labels: 'build:success'
   tip_ci_failed:
     needs: lint_and_build
     if: ${{ failure() }}
@@ -69,11 +68,10 @@ jobs:
       - name: Create label
         uses: actions-cool/issues-helper@v3
         with:
-          actions: 'create-label'
+          actions: 'add-labels'
           token: ${{ secrets.GITHUB_TOKEN }}
-          label-name: 'build-failed'
-          label-color: 'ff2700'
-          label-desc: 'Build Failed.'
+          issue-number: ${{ github.event.issue.number }}
+          labels: 'build:failed'
       - name: Add failed comment
         if: needs.lint_and_build.outputs.lint_passed != 1
         uses: actions-cool/issues-helper@v3
@@ -82,5 +80,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           issue-number: ${{ github.event.issue.number }}
           body: |
-            Failed to lint or build project, see: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}.
-          
+            @${{ github.event.issue.user.login }}.
+            
+            Failed to lint or build project. [Click here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) to check the workflow.
+
