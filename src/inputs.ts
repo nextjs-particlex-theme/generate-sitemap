@@ -30,15 +30,6 @@ type Inputs = {
   commitMessage: string
 }
 
-export type OriginalInputs = {
-  sourcePath: string
-  outputPath: string
-  pagesPath: string
-  sitemapCacheFile: string
-  webBasePath: string
-  commitMessage: string
-}
-
 function getOriginalInputs():OriginalInputs {
   if (process.env.NODE_ENV === 'production') {
     return {

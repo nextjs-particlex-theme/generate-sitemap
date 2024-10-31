@@ -7,7 +7,13 @@ export default tseslint.config({
     eslint.configs.recommended,
     ...tseslint.configs.recommended,
   ],
-  ignores: ['dist/', '.rollup.cache/'],
+  languageOptions: {
+    globals: {
+      process: true,
+      global: true
+    }
+  },
+  ignores: ['dist/**/*.js', '.rollup.cache/**/*.js'],
   rules: {
     'quotes': ['error', 'single'],
     'key-spacing': ['error', { 'beforeColon': false }],

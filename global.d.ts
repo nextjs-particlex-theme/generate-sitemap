@@ -6,8 +6,16 @@ declare namespace NodeJS {
   }
 }
 
+
+type OriginalInputs = {
+  sourcePath: string
+  outputPath: string
+  pagesPath: string
+  sitemapCacheFile: string
+  webBasePath: string
+  commitMessage: string
+}
 declare namespace global {
-  import { OriginalInputs } from './src/inputs'
-  export var originalInput: OriginalInputs | undefined
+  export let originalInput: OriginalInputs | undefined
 }
 
