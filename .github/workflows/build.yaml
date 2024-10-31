@@ -34,9 +34,9 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: repo/pnpm-lock.yaml
       - name: Lint Project
-        run: npm run lint && echo "passed=1" >> "$GITHUB_OUTPUT"
+        run: pnpm run lint
       - name: Build Project
-        run: npm run build && echo "passed=1" >> "$GITHUB_OUTPUT"
+        run: pnpm run build
       - name: Push Project
         run: >
           git config --global user.name "github-actions[bot]" &&
