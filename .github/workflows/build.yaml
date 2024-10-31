@@ -38,7 +38,7 @@ jobs:
       - name: Checkout Main Repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ steps.pr_branch.outputs.branch }}
+          ref: ${{ steps.pr_branch.outputs.result }}
           path: repo
       - uses: pnpm/action-setup@v2
         with:
