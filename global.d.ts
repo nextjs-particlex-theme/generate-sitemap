@@ -6,9 +6,16 @@ declare namespace NodeJS {
   }
 }
 
+
+type OriginalInputs = {
+  sourcePath: string
+  outputPath: string
+  pagesPath: string
+  sitemapCacheFile: string
+  webBasePath: string
+  commitMessage: string
+}
 declare namespace global {
-  import type { OriginalInputs } from './src/inputs'
-  // eslint-disable-next-line no-var
-  export var originalInput: OriginalInputs | undefined
+  export let originalInput: OriginalInputs | undefined
 }
 
