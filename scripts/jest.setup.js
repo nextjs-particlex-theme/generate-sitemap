@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-undef
 global.originalInput = {
   sourcePath: '',
   pagesPath: '',

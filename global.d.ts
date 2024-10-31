@@ -7,7 +7,8 @@ declare namespace NodeJS {
 }
 
 declare namespace global {
-  import { OriginalInputs } from './src/inputs'
+  import type { OriginalInputs } from './src/inputs'
+  // eslint-disable-next-line no-var
   export var originalInput: OriginalInputs | undefined
 }
 

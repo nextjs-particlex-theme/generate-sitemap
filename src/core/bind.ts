@@ -1,30 +1,27 @@
 import inputs from '../inputs'
 import fs from 'node:fs'
 import path from 'node:path'
-import {debug, isDebug, warn} from '../logger'
+import { debug, warn } from '../logger'
 
 export type BoundPage = {
   filepath: string
   webPathname: string
 }
 
-function getBaseNameWithoutSuffix(filePath: string): string {
-  const basename = path.basename(filePath)
-  if (basename.endsWith('.md')) {
-    return basename.substring(0, basename.length - 3)
-  } else if (basename.endsWith('.mdx')) {
-    return basename.substring(0, basename.length - 4)
+function trimMarkdownExtSuffix(filename: string): string {
+  if (filename.endsWith('.md')) {
+    return filename.substring(0, filename.length - 3)
+  } else if (filename.endsWith('.mdx')) {
+    return filename.substring(0, filename.length - 4)
   }
-  return basename
+  return filename
 }
 
-
 function findUntilEmpty(filePath: string): string | undefined{
-  // remove .md suffix
-  const target = filePath.substring(0, filePath.length - 3)
+  const target = trimMarkdownExtSuffix(filePath.substring(0, filePath.length - 3))
   const searchTarget = path.join(inputs.outputPath, target + '.html')
   if (fs.existsSync(searchTarget)) {
-    return getBaseNameWithoutSuffix(filePath)
+    return target
   } else {
     debug(`File \`${searchTarget}\` is not exist.`)
   }
@@ -44,10 +41,6 @@ function findUntilEmpty(filePath: string): string | undefined{
  */
 export default function tryBindPage(root: string, paths: string[]): BoundPage[] {
   const result: BoundPage[] = []
-  if (isDebug()) {
-    const searched = fs.globSync('**/*.html', { cwd: inputs.outputPath, withFileTypes: true })
-    debug('Output files: \n' + JSON.stringify(searched))
-  }
   for (const filePath of paths) {
     debug(`Trying to search the web path of '${filePath}'`)
     const webPath = findUntilEmpty(filePath)
