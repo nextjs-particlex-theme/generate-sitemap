@@ -24,6 +24,9 @@ jobs:
         with:
           ref: master
           path: repo
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9.12.x
       - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
