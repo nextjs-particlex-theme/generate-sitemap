@@ -1,9 +1,5 @@
 # Generate-Sitemap
 
-> [!IMPORTANT]
-> 
-> 由于很难计算每次打包后文件的哈希(因为每次打包 CSS 啥的链接会变)，已弃用，现在 particlex 框架自带 sitemap 生成功能。
-
 一个 **专门** 用于 [particlex](https://github.com/nextjs-particlex-theme/particlex) 主题的 Github Action，用于生成 sitemap。
 
 > [!CAUTION]
@@ -39,10 +35,10 @@ job:
           # IMPORTANT! 如果你想要提交 issue，请开启该功能以提供完全的调用栈!
           NODE_OPTIONS: "--enable-source-maps"
         with:
-        source-path: 'datasource'
-        output-path: 'nextjs-particlex-theme/out'
-        pages-path: 'source'
-        web-base-path: 'https://iceofsummer.github.io/'
+          source-path: 'datasource'
+          output-path: 'nextjs-particlex-theme/out'
+          pages-path: 'source'
+          web-base-path: 'https://iceofsummer.github.io/'
 
 ```
 
