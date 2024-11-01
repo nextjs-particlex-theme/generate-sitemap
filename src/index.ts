@@ -30,7 +30,7 @@ async function main() {
   const xml = await generateSitemapXML(inputs.basePath, bound, cache)
 
   info('Writing sitemap.xml...')
-  fs.writeFileSync(path.join(inputs.pagesPath, 'sitemap.xml'), xml, { encoding: 'utf8' })
+  fs.writeFileSync(path.join(inputs.outputPath, 'sitemap.xml'), xml, { encoding: 'utf8' })
   info('Writing cache file...')
   fs.writeFileSync(inputs.cacheFilePath, JSON.stringify(cache), 'utf8')
 
