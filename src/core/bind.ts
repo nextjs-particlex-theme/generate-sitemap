@@ -18,7 +18,7 @@ function trimMarkdownExtSuffix(filename: string): string {
 }
 
 function findUntilEmpty(filePath: string): string | undefined{
-  const target = trimMarkdownExtSuffix(filePath.substring(0, filePath.length - 3))
+  const target = trimMarkdownExtSuffix(filePath.substring(0))
   const searchTarget = path.join(inputs.outputPath, target + '.html')
   if (fs.existsSync(searchTarget)) {
     return target
@@ -37,7 +37,7 @@ function findUntilEmpty(filePath: string): string | undefined{
  * <p>
  * 每个 md 文件应该对应一个输出中的 HTML 文件，如果没有找到，则去掉前面的一层路径继续找
  * @param root md 文件的根路径
- * @param paths
+ * @param paths 相对于 root 的路径. 路径分隔符应该使用 [path.sep]
  */
 export default function tryBindPage(root: string, paths: string[]): BoundPage[] {
   const result: BoundPage[] = []
