@@ -1,6 +1,9 @@
 import core from '@actions/core'
 
 export function info(msg: string) {
+  if (process.env.NODE_ENV === 'test') {
+    return
+  }
   if (process.env.NODE_ENV === 'production') {
     core.info(msg)
   } else {
@@ -9,6 +12,9 @@ export function info(msg: string) {
 }
 
 export function debug(msg: string) {
+  if (process.env.NODE_ENV === 'test') {
+    return
+  }
   if (process.env.NODE_ENV === 'production') {
     core.debug(msg)
   } else {
@@ -18,6 +24,9 @@ export function debug(msg: string) {
 
 
 export function warn(msg: string) {
+  if (process.env.NODE_ENV === 'test') {
+    return
+  }
   if (process.env.NODE_ENV === 'production') {
     core.warning(msg)
   } else {
