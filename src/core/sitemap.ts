@@ -1,25 +1,17 @@
-import xml2js from 'xml2js'
 import fs from 'node:fs'
-import { md5 } from '../util'
+import { formatTime, md5 } from '../util'
 import type { BoundPage } from './bind'
 import { debug } from '../logger'
 
 
-type XMLSiteMap = {
-  '$': Record<string, string>
-  urlset: {
-    url: Array<XMLSitemapUrl>
-  }
+export type XMLSitemapUrl = {
+  loc: string,
+  priority: string,
+  lastmod: string,
+  changefreq: string,
 }
 
-type XMLSitemapUrl = {
-  loc: [string],
-  priority: [string],
-  lastmod: [string],
-  changefreq: [string],
-}
-
-type SitemapRecordItem = {
+export type SitemapRecordItem = {
   priority: string,
   lastmod: string,
   changefreq: string,
@@ -34,6 +26,26 @@ type SitemapRecordItem = {
  */
 export type SitemapRecord = Record<string, SitemapRecordItem>
 
+function buildXml(urls: XMLSitemapUrl[]) {
+
+  const builder = [`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">`]
+
+  for (const url of urls) {
+    builder.push(`\n<url>
+  <loc>${url.loc}</loc>
+  <lastmod>${url.lastmod}</lastmod>
+  <changefreq>${url.changefreq}</changefreq>
+  <priority>${url.priority}</priority>
+</url>`)
+  }
+
+  builder.push('\n</urlset>')
+  return builder.join('')
+}
+
+
 /**
  * 生成 sitemap
  * @param basepath 网站访问域名
@@ -42,20 +54,9 @@ export type SitemapRecord = Record<string, SitemapRecordItem>
  */
 export default async function generateSitemapXML(basepath: string, items: BoundPage[], sitemapRecord: SitemapRecord): Promise<string> {
 
-  const date = new Date()
-  const lastmod = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+  const lastmod = formatTime()
 
   const urls: XMLSitemapUrl[] = []
-  const root: XMLSiteMap = {
-    '$': {
-      xmlns: 'http://www.sitemaps.org/schemas/sitemap/0.9',
-      'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-      'xsi:schemaLocation': 'http://www.sitemaps.org/schemas/sitemap/0.9\nhttp://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd'
-    },
-    urlset: {
-      url: urls
-    }
-  }
 
   for (const item of items) {
     const url = new URL(item.webPathname, basepath)
@@ -80,13 +81,12 @@ export default async function generateSitemapXML(basepath: string, items: BoundP
   for (const key of Object.keys(sitemapRecord)) {
     const item = sitemapRecord[key]
     urls.push({
-      loc: [key],
-      changefreq: [item.changefreq],
-      lastmod: [item.lastmod],
-      priority: [item.priority]
+      loc: key,
+      changefreq: item.changefreq,
+      lastmod: item.lastmod,
+      priority: item.priority
     })
   }
 
-  const builder = new xml2js.Builder()
-  return Promise.resolve(builder.buildObject(root))
+  return Promise.resolve(buildXml(urls))
 }
