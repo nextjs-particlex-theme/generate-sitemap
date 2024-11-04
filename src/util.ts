@@ -92,3 +92,32 @@ export const commitAndPush = (filepath: string, cwd: string) => {
     spawnSyncAndEnsureSuccess('git', ['push', 'origin', branch], { stdio: 'inherit', cwd })
   }
 }
+
+/**
+ * 格式化时间，返回 2020-01-01 格式的时间，会自动补零.
+ * @param year 年，不填默认使用当前年
+ * @param month 月，不填默认使用当前月份
+ * @param date 日期，不填默认使用当前日期
+ */
+export const formatTime = (
+  year?: string | number,
+  month?: string | number, 
+  date?: string| number): string => {
+  const today = new Date()
+  if (!year) {
+    year = today.getFullYear()
+  }
+  if (!month) {
+    month = today.getMonth() + 1
+  }
+  if (!date) {
+    date = today.getDate()
+  }
+  if (typeof month === 'number') {
+    month = month.toString()
+  }
+  if (typeof date === 'number') {
+    date = date.toString()
+  }
+  return `${year}-${month.padStart(2, '0')}-${date.padStart(2, '0')}`
+}
