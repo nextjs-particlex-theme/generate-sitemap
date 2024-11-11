@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_OPTIONS='--experimental-vm-modules' jest",
+    "test": "jest",
     "lint": "eslint . --fix",
     "build": "cross-env NODE_ENV=production rollup -c"
   },

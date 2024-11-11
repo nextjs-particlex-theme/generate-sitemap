@@ -82,7 +82,8 @@ export const commitAndPush = (filepath: string, cwd: string) => {
 
   if (status === '') {
     core.debug('Status is ' + status)
-    throw Error('Nothing to commit!')
+    info('Nothing to commit, skip push.')
+    return
   }
 
   spawnSyncAndEnsureSuccess('git', ['commit', '-m', inputs.commitMessage], { stdio: 'inherit', cwd })

@@ -23,13 +23,14 @@ export default defineConfig({
     }
   },
   plugins: [
+    replace({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      sourcemap: true
+    }),
     typescript(),
     commonjs(),
     nodeResolve(),
     terser(),
-    replace({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-    }),
   ],
 }
 )

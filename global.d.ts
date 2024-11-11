@@ -1,21 +1,7 @@
+import type { OriginalInputs } from './src/inputs'
 
-declare namespace NodeJS {
-  export interface ProcessEnv {
-    readonly GITHUB_WORKSPACE: string
-    readonly NODE_ENV: 'development' | 'production' | 'test'
-  }
+
+declare global {
+  // eslint-disable-next-line no-var
+  var originalInput: OriginalInputs | undefined
 }
-
-
-type OriginalInputs = {
-  sourcePath: string
-  outputPath: string
-  pagesPath: string
-  sitemapCacheFile: string
-  webBasePath: string
-  commitMessage: string
-}
-declare namespace global {
-  export let originalInput: OriginalInputs | undefined
-}
-

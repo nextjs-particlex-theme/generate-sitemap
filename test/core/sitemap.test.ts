@@ -1,9 +1,9 @@
 import tryBindPage from '../../src/core/bind'
 import inputs, { TEST_VISIT_PATH } from '../../src/inputs'
-import type { SitemapRecord, SitemapRecordItem, XMLSitemapUrl } from '../../src/core/sitemap'
+import type { SitemapRecordItem, XMLSitemapUrl } from '../../src/core/sitemap'
 import generateSitemapXML from '../../src/core/sitemap'
 import path from 'node:path'
-import { formatTime } from '../../src/util'
+import { formatTime, md5 } from '../../src/util'
 
 
 function parseXmlByRegx(sitemapXml: string): XMLSitemapUrl[] {
@@ -27,10 +27,16 @@ test('Test new sitemap generate', async () => {
   const target = ['hello.md', `_post${path.sep}index.md`]
   const bound = tryBindPage(inputs.pagesPath, target)
 
-  const record = {}
   const today = formatTime()
 
-  const generated = await generateSitemapXML(TEST_VISIT_PATH, bound, record)
+  const [generated, _] = await generateSitemapXML({
+    basepath: TEST_VISIT_PATH,
+    pages: bound,
+    calculateHash: (page) => {
+      return md5(page.filepath)
+    },
+    oldRecord: {}
+  })
   const generatedUrls = parseXmlByRegx(generated)
 
   const testUrl = new URL(TEST_VISIT_PATH)
@@ -62,11 +68,17 @@ test('Test sitemap update', async () => {
     changefreq: 'weekly',
     sha: ''
   }
-  const record: SitemapRecord = {
-    [testUrl.href]: item
-  }
 
-  const generated = await generateSitemapXML(TEST_VISIT_PATH, bound, record)
+  const [generated, _] = await generateSitemapXML({
+    basepath: TEST_VISIT_PATH,
+    pages: bound,
+    calculateHash: (page) => {
+      return md5(page.filepath)
+    },
+    oldRecord: {
+      [testUrl.href]: item
+    }
+  })
 
   const generatedUrls = parseXmlByRegx(generated)
 
