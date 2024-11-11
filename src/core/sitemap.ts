@@ -1,6 +1,4 @@
-import fs from 'node:fs'
-import { formatTime, md5 } from '../util'
-import type { BoundPage } from './bind'
+import { formatTime } from '../util'
 import { debug } from '../logger'
 
 
@@ -47,24 +45,46 @@ function buildXml(urls: XMLSitemapUrl[]) {
 
 
 /**
- * 生成 sitemap
- * @param basepath 网站访问域名
- * @param items 要生成的 sitemap url
- * @param sitemapRecord 旧的 sitemap 内容. 将会修改该对象的内容，如果没有可用的对象，应该传入一个空对象来获取修改后的设置，以便于持久化
+ * 文章 pathname
  */
-export default async function generateSitemapXML(basepath: string, items: BoundPage[], sitemapRecord: SitemapRecord): Promise<string> {
+interface Page {
+  webPathname: string
+}
+
+export type GenerateOptions<T extends Page> = {
+  basepath: string
+  pages: T[]
+  oldRecord?: SitemapRecord
+  /**
+   * 计算页面哈希
+   * @param page 页面
+   * @return {string} 哈希值
+   */
+  calculateHash: (page: T) => Promise<string>
+}
+
+/**
+ * 生成 sitemap
+ * @param generateOptions 设置
+ * @return {} 数组第一个返回生成的 xml，第二个返回新的 {@link SitemapRecord}
+ */
+export default async function generateSitemapXML<T extends Page>(generateOptions: GenerateOptions<T>): Promise<[string, SitemapRecord]> {
+
+  const newRecord: SitemapRecord = {
+    ...generateOptions.oldRecord
+  }
 
   const lastmod = formatTime()
 
   const urls: XMLSitemapUrl[] = []
 
-  for (const item of items) {
-    const url = new URL(item.webPathname, basepath)
-    const record = sitemapRecord[url.href]
-    const newSha = await md5(fs.readFileSync(item.filepath, 'utf8'))
-    debug(`The hash of file ${item.filepath} is '${newSha}'`)
+  for (const page of generateOptions.pages) {
+    const url = new URL(page.webPathname, generateOptions.basepath)
+    const record = newRecord[url.href]
+    const newSha = await generateOptions.calculateHash(page)
+    debug(`The hash of the page ${page} is '${newSha}'`)
     if (!record) {
-      sitemapRecord[url.href] = {
+      newRecord[url.href] = {
         sha: newSha,
         lastmod,
         changefreq: 'weekly',
@@ -78,8 +98,8 @@ export default async function generateSitemapXML(basepath: string, items: BoundP
     }
   }
 
-  for (const key of Object.keys(sitemapRecord)) {
-    const item = sitemapRecord[key]
+  for (const key of Object.keys(newRecord)) {
+    const item = newRecord[key]
     urls.push({
       loc: key,
       changefreq: item.changefreq,
@@ -88,5 +108,5 @@ export default async function generateSitemapXML(basepath: string, items: BoundP
     })
   }
 
-  return Promise.resolve(buildXml(urls))
+  return Promise.resolve([buildXml(urls), newRecord])
 }
