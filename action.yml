@@ -1,27 +1,27 @@
-name: 'Generate Sitemap'
-description: 'Automatically generate sitemap for you website.'
+name: 'generate-sitemap'
+description: '一个 专门 用于 particlex 主题的 Github Action，用于生成 sitemap。'
 inputs:
   source-path:
-    description: 'The directory of your repo. We will commit a sitemap file to this repo. Must be checkout before this action run!'
+    description: '仓库的路径，在运行后将会提交一个 sitemap 缓存文件到你的仓库里'
     required: true
     default: 'datasource'
   output-path:
-    description: 'The HTML output path.'
+    description: 'HTML 输出路径'
     required: true
     default: 'nextjs-particlex-theme/out'
   pages-path:
-    description: 'The path that you save all the markdown files, relative from `source-path`.'
+    description: 'Markdown 保存路径，相对于 `source-path` 的路径'
     required: true
     default: 'source'
   sitemap-cache-file:
-    description: 'A relative path from `source-path` to store the sitemap cache file'
+    description: 'sitemap 缓存文件放在哪里，相对于 `source-path` 的路径'
     required: true
     default: 'sitemap-cache.json'
   web-base-path:
-    description: 'Your site base path'
+    description: '博客访问路径'
     required: true
   commit-message:
-    description: 'The commit message when update cache file.'
+    description: '自定义提交信息'
     default: 'Update sitemap-cache.json'
 runs:
   using: 'node20'
