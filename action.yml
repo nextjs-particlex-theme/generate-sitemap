@@ -1,5 +1,8 @@
 name: 'nextjs-particlex-theme/generate-sitemap'
 description: '一个 专门 用于 particlex 主题的 Github Action，用于生成 sitemap。'
+branding:
+  icon: map
+  color: 'blue'
 inputs:
   source-path:
     description: '仓库的路径，在运行后将会提交一个 sitemap 缓存文件到你的仓库里'
